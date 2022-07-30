@@ -22,8 +22,8 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://rm-bp1cj3juuz9109z58wo.mysql.rds.aliyuncs.com/wiki?characterEncoding=UTF8"
-                        userId="wiki"
+                        connectionURL="jdbc:mysql://rm-bp1cj3juuz9109z58wo.mysql.rds.aliyuncs.com/wikidev?characterEncoding=UTF8"
+                        userId="wikidev"
                         password="Lcf2863570139">
         </jdbcConnection>
 
@@ -40,8 +40,8 @@
                              targetPackage="com.jiawa.wiki.mapper"
                              type="XMLMAPPER"/>
 
-        <table tableName="demo" domainObjectName="Demo"/>
-        <!--<table tableName="ebook"/>-->
+        <!--<table tableName="demo" domainObjectName="Demo"/>-->
+        <table tableName="ebook"/>
         <!--<table tableName="category"/>-->
         <!--<table tableName="doc"/>-->
         <!--<table tableName="content"/>-->
