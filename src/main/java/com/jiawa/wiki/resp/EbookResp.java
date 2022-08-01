@@ -1,4 +1,4 @@
-package com.jiawa.wiki.req;
+package com.jiawa.wiki.resp;
 
 public class EbookResp {
     private Long id;
