@@ -71,6 +71,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'Home',
@@ -134,6 +135,15 @@ export default defineComponent({
 
         loading.value = false;
         const data = response.data;
+        if (data.success) {
+          ebooks.value = data.content.list;
+
+          // 重置分页按钮
+          pagination.value.current = params.page;
+          pagination.value.total = data.content.total;
+        } else {
+          message.error(data.message);
+        }
         ebooks.value = data.content.list;
           // 重置分页按钮
           pagination.value.current = params.page;
