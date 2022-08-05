@@ -73,7 +73,7 @@ import { defineComponent,onMounted,ref,reactive,toRef} from 'vue';
 import axios from 'axios';
 
 
-const listData: any = [];
+/*const listData: any = [];
 
 for (let i = 0; i < 23; i++) {
   listData.push({
@@ -85,7 +85,7 @@ for (let i = 0; i < 23; i++) {
     content:
         'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
   });
-}
+}*/
 
 export default defineComponent({
   name: 'Home',
@@ -94,19 +94,20 @@ export default defineComponent({
     const ebooks = ref();
     const ebooks1 = reactive({books:[]});
     onMounted(() => {
-      console.log("onMounted2222")
-      axios.get("/ebook/list").then((response) => {
-       const data = response.data;
-       ebooks.value= data.content;
-       ebooks1.books = data.content;
-        console.log(response);
-
+      axios.get("/ebook/list",{
+         params:{
+           page:1,
+           size:1000
+         }
+      }).then((response) =>{
+      const data = response.data;
+      ebooks.value = data.content.list;
       });
     });
     return {
       ebooks,
-      ebooks2:toRef(ebooks1,"books"),
-        listData,
+      // ebooks2:toRef(ebooks1,"books"),
+      //   listData,
         pagination:{
         onchange: (page: any) => {
           console.log(page);
