@@ -10,6 +10,7 @@ import com.jiawa.wiki.req.EbookSaveReq;
 import com.jiawa.wiki.resp.EbookQueryResp;
 import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.util.CopyUtil;
+import com.jiawa.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class EbookService {
     private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
     @Resource
     private EbookMapper ebookMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
 
     public PageResp<EbookQueryResp> list(EbookQueryReq req){
 
@@ -55,17 +59,23 @@ public class EbookService {
         return pageResp;
     }
 
+
     /**
      * 保存
      */
-    public void save(EbookSaveReq req){
-        Ebook ebook = CopyUtil.copy(req,Ebook.class);
-        if(ObjectUtils.isEmpty(req.getId())){
-            //新增
+    public void save(EbookSaveReq req) {
+        Ebook ebook = CopyUtil.copy(req, Ebook.class);
+        if (ObjectUtils.isEmpty(req.getId())) {
+            // 新增
+            ebook.setId(snowFlake.nextId());
             ebookMapper.insert(ebook);
-        }else{
+        } else {
+            // 更新
             ebookMapper.updateByPrimaryKey(ebook);
         }
-        ebookMapper.updateByPrimaryKey(ebook);
+    }
+
+    public void delete(Long id) {
+        ebookMapper.deleteByPrimaryKey(id);
     }
 }
