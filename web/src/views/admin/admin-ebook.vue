@@ -5,9 +5,22 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <p>
-        <a-button type="primary" @click="add" size="large">
-          新增
-        </a-button>
+        <a-form layout="inline" :model="param">
+          <a-form-item>
+            <a-input v-model:value="param.name" placeholder="名称">
+            </a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="handleQuery({page: 1, size: pagination.pageSize})">
+              查询
+            </a-button>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="add()">
+              新增
+            </a-button>
+          </a-form-item>
+        </a-form>
       </p>
       <a-table
         :columns="columns"
@@ -76,6 +89,8 @@ import { message } from 'ant-design-vue';
 export default defineComponent({
   name: 'Home',
   setup() {
+      const param = ref();
+      param.value = {};
     const ebooks = ref();
     const pagination = ref({
       current: 1,
@@ -129,10 +144,15 @@ export default defineComponent({
      **/
     const handleQuery = (params: any) => {
       loading.value = true;
+      // 如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则列表显示的还是编辑前的数据
+      ebooks.value = [];
       axios.get("/ebook/list", {
-        params:params.page,
-      }).then((response) =>{
-
+        params: {
+          page: params.page,
+          size: params.size,
+          name: param.value.name
+        }
+      }).then((response) => {
         loading.value = false;
         const data = response.data;
         if (data.success) {
@@ -144,11 +164,6 @@ export default defineComponent({
         } else {
           message.error(data.message);
         }
-        ebooks.value = data.content.list;
-          // 重置分页按钮
-          pagination.value.current = params.page;
-          pagination.value.total = data.content.total;
-
       });
     };
 
@@ -222,11 +237,13 @@ export default defineComponent({
 });
 
   return {
+    param,
     ebooks,
     pagination,
     columns,
     loading,
     handleTableChange,
+    handleQuery,
 
     edit,
     add,
